@@ -1,23 +1,18 @@
-import dotenv from 'dotenv';
-import { VitePluginNode } from 'vite-plugin-node';
-dotenv.config();
+import { defineConfig } from "vite";
+import { VitePluginNode } from "vite-plugin-node";
 
-const config = () => {
-    return {
-        server: {
-            port: process.env.PORT,
-        },
-        plugins: [
-            ...VitePluginNode({
-                adapter: 'express',
-                appPath: './src/app.js',
-                exportName: 'viteNodeApp',
-                tsCompiler: 'esbuild',
-                swcOptions: {},
-            }),
-        ],
-        optimizeDeps: {},
-    };
-};
-
-export default config;
+export default defineConfig({
+    server: {
+        port: 8080,
+    },
+    plugins: [
+        ...VitePluginNode({
+            adapter: "express",
+            appPath: "./src/app.js",
+            tsCompiler: "esbuild",
+            swcOptions: {},
+        }),
+    ],
+    optimizeDeps: {
+    },
+});
