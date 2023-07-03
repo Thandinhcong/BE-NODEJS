@@ -20,6 +20,13 @@ const schemaProducts = mongoose.Schema({
     longDescription: {
         type: String
     }
-
+    , image: {
+        type: String,
+        require: true,
+    },
+    categoryId: {
+        type: mongoose.Types.ObjectId,
+        ref: "Categories",
+    },
 })
 export default mongoose.model("Product", schemaProducts)
