@@ -4,7 +4,7 @@ import { schemaProduct } from "../schema/products";
 import Sizes from "../modules/size";
 export const ListAllProduct = async (req, res) => {
     try {
-        const products = await Products.find().populate('sizes');
+        const products = await Products.find();
         if (!products) {
             return res.status(400).json({
                 message: "Không có sản phẩm nào"
@@ -22,13 +22,14 @@ export const ListAllProduct = async (req, res) => {
 }
 export const ListOneProduct = async (req, res) => {
     try {
-        const products = await Products.findById(req.params.id).populate({
-            path: "sizes",
-            populate: {
-                path: "productId",
-                model: "Product"
-            }
-        })
+        const products = await Products.findOne({ _id: req.params.id })
+            .populate({
+                path: "sizes",
+                populate: {
+                    path: "productId",
+                    model: "Product"
+                }
+            })
         if (!products) {
             return res.status(400).json({
                 message: "Không có sản phẩm nào"
