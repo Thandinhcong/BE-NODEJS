@@ -1,9 +1,10 @@
 import Products from "../modules/products";
 import Categories from "../modules/categories";
 import { schemaProduct } from "../schema/products";
+import Sizes from "../modules/size";
 export const ListAllProduct = async (req, res) => {
     try {
-        const products = await Products.find();
+        const products = await Products.find().populate('sizes');
         if (!products) {
             return res.status(400).json({
                 message: "Không có sản phẩm nào"
@@ -21,7 +22,13 @@ export const ListAllProduct = async (req, res) => {
 }
 export const ListOneProduct = async (req, res) => {
     try {
-        const products = await Products.findById(req.params.id).populate("categoryId")
+        const products = await Products.findById(req.params.id).populate({
+            path: "sizes",
+            populate: {
+                path: "productId",
+                model: "Product"
+            }
+        })
         if (!products) {
             return res.status(400).json({
                 message: "Không có sản phẩm nào"
@@ -47,6 +54,13 @@ export const Addproduct = async (req, res) => {
             })
         }
         const products = await Products.create(req.body);
+        const sizeIds = req.body.sizeIds;
+
+        // Liên kết các size với sản phẩm
+        await Sizes.updateMany(
+            { _id: { $in: sizeIds } },
+            { $addToSet: { products: products._id } }
+        );
         await Categories.findByIdAndUpdate(products.categoryId, {
             $addToSet: {
                 products: products._id,
@@ -64,7 +78,6 @@ export const Addproduct = async (req, res) => {
             });
         }
     } catch (error) {
-        console.error(error);
         return res.status(500).json({
             message: "Lỗi xảy ra khi tạo sản phẩm",
             error: error.message,

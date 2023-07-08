@@ -28,5 +28,9 @@ const schemaProducts = mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: "Categories",
     },
+    size: {
+        type: mongoose.Types.ObjectId,
+        ref: "Size"
+    }
 })
 export default mongoose.model("Product", schemaProducts)

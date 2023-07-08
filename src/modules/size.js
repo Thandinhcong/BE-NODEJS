@@ -1,7 +1,11 @@
 import mongoose from "mongoose";
-const schemaSize = mongoose.Schema({
+
+const sizeSchema = new mongoose.Schema({
     name: String,
     productQuantity: Number,
-    products: []
-})
-export default mongoose.model('Size', schemaSize)
+    products: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }]
+});
+
+const Size = mongoose.model('Size', sizeSchema);
+
+export default Size;

@@ -6,5 +6,7 @@ routerProduct.get("/products", ListAllProduct)
 routerProduct.get("/products/:id", ListOneProduct)
 routerProduct.post("/products", Addproduct)
 routerProduct.delete("/products/:id", deleteProduct);
+routerProduct.put("/products/:id",);
+
 
 export default routerProduct;
