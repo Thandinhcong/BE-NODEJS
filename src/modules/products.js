@@ -28,7 +28,7 @@ const schemaProducts = mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: "Categories",
     },
-    size: {
+    sizes: {
         type: mongoose.Types.ObjectId,
         ref: "Size"
     }

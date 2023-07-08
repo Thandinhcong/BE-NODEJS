@@ -4,7 +4,7 @@ import { schemaProduct } from "../schema/products";
 import Sizes from "../modules/sizes";
 export const ListAllProduct = async (req, res) => {
     try {
-        const products = await Products.find().populate("sizes");
+        const products = await Products.find().populate("sizes", "name");
         if (!products) {
             return res.status(400).json({
                 message: "Không có sản phẩm nào"
@@ -22,14 +22,14 @@ export const ListAllProduct = async (req, res) => {
 }
 export const ListOneProduct = async (req, res) => {
     try {
-        const products = await Products.findOne({ _id: req.params.id })
-            .populate({
-                path: "sizes",
-                populate: {
-                    path: "productId",
-                    model: Products,
-                }
-            })
+        const products = await Products.findOne({ _id: req.params.id }).populate("sizes", "name")
+            // .populate({
+            //     path: "sizes",
+            //     populate: {
+            //         path: "name",
+            //         // model: Products,
+            //     }
+            // })
         if (!products) {
             return res.status(400).json({
                 message: "Không có sản phẩm nào"
@@ -96,19 +96,18 @@ export const deleteProduct = async (req, res) => {
         }
 
         //cập nhật danh mục khi xóa sản phẩm 
-        const updatedCategory = await Categories.findOneAndUpdate(
-            { product: req.params.id },
-            { $pull: { product: req.params.id } },
-            { new: true }
-        );
-        if (!updatedCategory) {
-            return res.status(400).json({
-                message: "Không tìm thấy danh mục chứa sản phẩm",
-            });
-        }
+        // const updatedCategory = await Categories.findOneAndUpdate(
+        //     { product: req.params.id },
+        //     { $pull: { product: req.params.id } },
+        //     { new: true }
+        // );
+        // if (!updatedCategory) {
+        //     return res.status(400).json({
+        //         message: "Không tìm thấy danh mục chứa sản phẩm",
+        //     });
+        // }
         return res.status(200).json({
             message: "Xóa sản phẩm thành công và đã cập nhật danh mục",
-            product
         });
     } catch (error) {
         return res.status(500).json({

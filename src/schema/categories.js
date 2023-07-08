@@ -2,5 +2,6 @@ import Joi from "joi";
 
 export const schemaCategories = Joi.object({
     name: Joi.string().required(),
-    image: Joi.string()
+    image: Joi.string(),
+    products: Joi.string()
 })

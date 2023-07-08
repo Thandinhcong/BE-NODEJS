@@ -6,4 +6,6 @@ export const schemaProduct = Joi.object({
     description: Joi.string(),
     longDescription: Joi.string(),
     image: Joi.string(),
+    categoryId: Joi.string(),
+    sizes: Joi.string()
 })
