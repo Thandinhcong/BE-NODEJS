@@ -1,10 +1,10 @@
 import Products from "../modules/products";
 import Categories from "../modules/categories";
 import { schemaProduct } from "../schema/products";
-import Sizes from "../modules/size";
+import Sizes from "../modules/sizes";
 export const ListAllProduct = async (req, res) => {
     try {
-        const products = await Products.find();
+        const products = await Products.find().populate("sizes");
         if (!products) {
             return res.status(400).json({
                 message: "Không có sản phẩm nào"
@@ -27,7 +27,7 @@ export const ListOneProduct = async (req, res) => {
                 path: "sizes",
                 populate: {
                     path: "productId",
-                    model: "Product"
+                    model: Products,
                 }
             })
         if (!products) {
@@ -97,8 +97,8 @@ export const deleteProduct = async (req, res) => {
 
         //cập nhật danh mục khi xóa sản phẩm 
         const updatedCategory = await Categories.findOneAndUpdate(
-            { products: req.params.id },
-            { $pull: { products: req.params.id } },
+            { product: req.params.id },
+            { $pull: { product: req.params.id } },
             { new: true }
         );
         if (!updatedCategory) {
@@ -113,6 +113,33 @@ export const deleteProduct = async (req, res) => {
     } catch (error) {
         return res.status(500).json({
             message: "Lỗi server"
+        })
+    }
+}
+export const UpdateProduct = async (req, res) => {
+    try {
+        // const { error } = schemaProduct.validate(req.body, { abortEarly: false });
+        // if (error) {
+        //     const errors = error.map((err) => err.message)
+        //     return res.status(400).json({
+        //         message: errors,
+        //     })
+        // }
+        const data = await Products.findByIdAndUpdate({ _id: req.params.id }, req.body, { new: true });
+        if (!data) {
+            res.status(400).json({
+                message: "Không có sản phẩm nòa",
+            })
+        }
+        else {
+            res.status(200).json({
+                message: "update product success",
+                products: data,
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: error,
         })
     }
 }

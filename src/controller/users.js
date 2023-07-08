@@ -52,6 +52,7 @@ export const Signup = async (req, res) => {
         return res.status(201).json({
             message: 'Tạo tài khoản thành công',
             accessToken: token,
+            user,
         })
     } catch (error) {
         console.log(error);
@@ -85,6 +86,7 @@ export const Signin = async (req, res) => {
         return res.status(201).json({
             message: 'Đăng nhập thành công thành công',
             accessToken: token,
+            user
         })
     } catch (error) {
         console.log(error);
